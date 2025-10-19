@@ -12,6 +12,7 @@ import {
   Sidebar,
   SidebarContent,
   SidebarFooter,
+  SidebarGroup,
   SidebarHeader,
   SidebarInset,
   SidebarMenu,
@@ -20,6 +21,9 @@ import {
   SidebarProvider,
   SidebarTrigger,
 } from "@/components/ui/sidebar";
+import { SignedIn, SignedOut } from "@clerk/nextjs";
+import { LogInIcon } from "lucide-react";
+import Link from "next/link";
 
 export default function Home() {
   return (
@@ -32,11 +36,20 @@ export default function Home() {
           </SidebarHeader>
           <SidebarContent>Content</SidebarContent>
           <SidebarFooter>
-            <SidebarMenu>
-              <SidebarMenuItem>
-                <SidebarMenuButton>adsdsd</SidebarMenuButton>
-              </SidebarMenuItem>
-            </SidebarMenu>
+            <SidebarGroup>
+              <SidebarMenu>
+                <SignedOut>
+                  <SidebarMenuItem>
+                    <SidebarMenuButton asChild>
+                      <Link href="/sign-in">
+                        <LogInIcon />
+                        <span>Log in</span>
+                      </Link>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                </SignedOut>
+              </SidebarMenu>
+            </SidebarGroup>
           </SidebarFooter>
         </Sidebar>
       </SidebarProvider>
