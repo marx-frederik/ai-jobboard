@@ -24,6 +24,7 @@ import {
 import { SignedIn, SignedOut } from "@clerk/nextjs";
 import { LogInIcon } from "lucide-react";
 import Link from "next/link";
+import { SidebarUserButton } from "./features/users/components/SidebarUserButton";
 
 export default function Home() {
   return (
@@ -34,8 +35,7 @@ export default function Home() {
             <SidebarTrigger />
             <span className="text-xl">Netzschmiede</span>
           </SidebarHeader>
-          <SidebarContent>Content</SidebarContent>
-          <SidebarFooter>
+          <SidebarContent>
             <SidebarGroup>
               <SidebarMenu>
                 <SignedOut>
@@ -50,8 +50,18 @@ export default function Home() {
                 </SignedOut>
               </SidebarMenu>
             </SidebarGroup>
+          </SidebarContent>
+          <SidebarFooter>
+            <SidebarGroup>
+              <SidebarMenu>
+                <SignedIn>
+                  <SidebarUserButton />
+                </SignedIn>
+              </SidebarMenu>
+            </SidebarGroup>
           </SidebarFooter>
         </Sidebar>
+        <main className="flex-1"></main>
       </SidebarProvider>
     </>
   );
