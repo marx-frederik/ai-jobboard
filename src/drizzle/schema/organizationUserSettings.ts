@@ -7,7 +7,7 @@ import {
 } from "drizzle-orm/pg-core"
 import { createdAt, updatedAt } from "../schemaHelpers"
 import { UserTable } from "./user"
-import { OrganizationTable } from "./organization"
+import { OrganizationTable } from "./organizations"
 import { relations } from "drizzle-orm"
 
 export const OrganizationUserSettingsTable = pgTable(
