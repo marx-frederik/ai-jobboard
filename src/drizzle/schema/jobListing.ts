@@ -1,66 +1,83 @@
 import {
-  boolean,
-  index,
   integer,
   pgEnum,
   pgTable,
-  timestamp,
-  uuid,
+  text,
   varchar,
-} from "drizzle-orm/pg-core";
-import { OrganizationTable } from "./organizations";
-import { relations } from "drizzle-orm";
-import { JobListingApplicationTable } from "./jobListingApplication";
+  boolean,
+  timestamp,
+  index,
+} from "drizzle-orm/pg-core"
+import { createdAt, id, updatedAt } from "../schemaHelpers"
 
-export const wageIntervals = ["hourly", "yearly"] as const;
-type WageInterval = (typeof wageIntervals)[number];
-export const wageIntervalEnum = pgEnum("wage_interval", wageIntervals);
+import { relations } from "drizzle-orm"
+import { JobListingApplicationTable } from "./jobListingApplication"
+import { OrganizationTable } from "./organization"
 
-const locationIntervals = ["remote", "onsite", "hybrid"] as const;
-type LocationInterval = (typeof locationIntervals)[number];
-export const locationIntervalEnum = pgEnum(
-  "location_interval",
-  locationIntervals
-);
+export const wageIntervals = ["hourly", "yearly"] as const
+export type WageInterval = (typeof wageIntervals)[number]
+export const wageIntervalEnum = pgEnum(
+  "job_listings_wage_interval",
+  wageIntervals
+)
 
-const experienceLevels = ["entry", "intermediate", "senior"] as const;
-type ExperienceLevel = (typeof experienceLevels)[number];
-export const experienceLevelEnum = pgEnum("experience_level", experienceLevels);
+export const locationRequirements = ["in-office", "hybrid", "remote"] as const
+export type LocationRequirement = (typeof locationRequirements)[number]
+export const locationRequirementEnum = pgEnum(
+  "job_listings_location_requirement",
+  locationRequirements
+)
 
-const jobTypes = ["full-time", "part-time", "contract", "internship"] as const;
-type JobType = (typeof jobTypes)[number];
-export const jobTypeEnum = pgEnum("job_type", jobTypes);
+export const experienceLevels = ["junior", "mid-level", "senior"] as const
+export type ExperienceLevel = (typeof experienceLevels)[number]
+export const experienceLevelEnum = pgEnum(
+  "job_listings_experience_level",
+  experienceLevels
+)
+
+export const jobListingStatuses = ["draft", "published", "delisted"] as const
+export type JobListingStatus = (typeof jobListingStatuses)[number]
+export const jobListingStatusEnum = pgEnum(
+  "job_listings_status",
+  jobListingStatuses
+)
+
+export const jobListingTypes = ["internship", "part-time", "full-time"] as const
+export type JobListingType = (typeof jobListingTypes)[number]
+export const jobListingTypeEnum = pgEnum("job_listings_type", jobListingTypes)
 
 export const JobListingTable = pgTable(
   "job_listings",
   {
-    id: uuid().primaryKey().defaultRandom(),
-    organizationId: varchar().references(() => OrganizationTable.id, {
-      onDelete: "cascade",
-    }),
+    id,
+    organizationId: varchar()
+      .references(() => OrganizationTable.id, { onDelete: "cascade" })
+      .notNull(),
     title: varchar().notNull(),
-    description: varchar().notNull(),
-    wageInterval: wageIntervalEnum("hourly").notNull(),
-    wage: integer().notNull(),
+    description: text().notNull(),
+    wage: integer(),
+    wageInterval: wageIntervalEnum(),
     stateAbbreviation: varchar(),
     city: varchar(),
     isFeatured: boolean().notNull().default(false),
-    locationInterval: locationIntervalEnum("onsite").notNull(),
-    experienceLevel: experienceLevelEnum("entry").notNull(),
-    jobType: jobTypeEnum("full-time").notNull(),
-    createdAt: timestamp().notNull().defaultNow(),
-    updatedAt: timestamp().notNull().defaultNow(),
+    locationRequirement: locationRequirementEnum().notNull(),
+    experienceLevel: experienceLevelEnum().notNull(),
+    status: jobListingStatusEnum().notNull().default("draft"),
+    type: jobListingTypeEnum().notNull(),
+    postedAt: timestamp({ withTimezone: true }),
+    createdAt,
+    updatedAt,
   },
-  (table) => [index().on(table.stateAbbreviation)]
-);
+  table => [index().on(table.stateAbbreviation)]
+)
 
-export const jobListingRelations = relations(
+export const jobListingReferences = relations(
   JobListingTable,
   ({ one, many }) => ({
     organization: one(OrganizationTable, {
       fields: [JobListingTable.organizationId],
       references: [OrganizationTable.id],
     }),
-    application: many(JobListingApplicationTable),
+    applications: many(JobListingApplicationTable),
   })
-);
+)

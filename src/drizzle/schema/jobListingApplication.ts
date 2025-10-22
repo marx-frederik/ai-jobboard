@@ -5,49 +5,54 @@ import {
   primaryKey,
   text,
   uuid,
-} from "drizzle-orm/pg-core";
-import { UserTable } from "./user";
-import { JobListingTable } from "./jobListing";
-import { createdAt, updatedAt } from "../schemaHelpers";
-import { relations } from "drizzle-orm";
-import { OrganizationTable } from "./organizations";
+  varchar,
+} from "drizzle-orm/pg-core"
+import { JobListingTable } from "./jobListing"
+import { UserTable } from "./user"
+import { createdAt, updatedAt } from "../schemaHelpers"
+import { relations } from "drizzle-orm"
 
-const applicationStages = [
+export const applicationStages = [
+  "denied",
   "applied",
-  "viewed",
+  "interested",
   "interviewed",
-  "declined",
-  "accepted",
-] as const;
-type ApplicationStage = (typeof applicationStages)[number];
-const applicationStageEnum = pgEnum("application_stage", applicationStages);
+  "hired",
+] as const
+export type ApplicationStage = (typeof applicationStages)[number]
+export const applicationStageEnum = pgEnum(
+  "job_listing_applications_stage",
+  applicationStages
+)
 
 export const JobListingApplicationTable = pgTable(
   "job_listing_applications",
   {
-    jobListingId: uuid().references(() => JobListingTable.id, {
-      onDelete: "cascade",
-    }),
-    userId: uuid().references(() => UserTable.id, { onDelete: "cascade" }),
+    jobListingId: uuid()
+      .references(() => JobListingTable.id, { onDelete: "cascade" })
+      .notNull(),
+    userId: varchar()
+      .references(() => UserTable.id, { onDelete: "cascade" })
+      .notNull(),
     coverLetter: text(),
     rating: integer(),
     stage: applicationStageEnum().notNull().default("applied"),
     createdAt,
     updatedAt,
   },
-  (table) => [primaryKey({ columns: [table.jobListingId, table.userId] })]
-);
+  table => [primaryKey({ columns: [table.jobListingId, table.userId] })]
+)
 
 export const jobListingApplicationRelations = relations(
   JobListingApplicationTable,
-  ({ one, many }) => ({
+  ({ one }) => ({
+    jobListing: one(JobListingTable, {
+      fields: [JobListingApplicationTable.jobListingId],
+      references: [JobListingTable.id],
+    }),
     user: one(UserTable, {
       fields: [JobListingApplicationTable.userId],
       references: [UserTable.id],
     }),
-    jobListingId: one(JobListingTable, {
-      fields: [JobListingApplicationTable.jobListingId],
-      references: [JobListingTable.id],
-    }),
   })
-);
+)
