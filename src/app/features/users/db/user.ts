@@ -8,7 +8,7 @@ export async function insertUser(user: typeof UserTable.$inferInsert) {
 
 export async function updateUser(
   id: string,
-  user: typeof UserTable.$inferInsert
+  user: Partial<typeof UserTable.$inferInsert>
 ) {
   await db.update(UserTable).set(user).where(eq(UserTable.id, id));
 }
