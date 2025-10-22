@@ -18,17 +18,17 @@ export const env = createEnv({
     CLERK_WEBHOOK_SECRET: z.string().min(1),    // Webhook-Secret für Clerk Events
     
     // File Upload Service
-    UPLOADTHING_TOKEN: z.string().min(1),       // API-Token für UploadThing Service
+    UPLOADTHING_TOKEN: z.string().min(1).optional(),       // API-Token für UploadThing Service
     
     // AI/ML API Keys
-    ANTHROPIC_API_KEY: z.string().min(1),       // API-Key für Anthropic (Claude AI)
-    GEMINI_API_KEY: z.string().min(1),          // API-Key für Google Gemini AI
+    ANTHROPIC_API_KEY: z.string().min(1).optional(),       // API-Key für Anthropic (Claude AI)
+    GEMINI_API_KEY: z.string().min(1).optional(),          // API-Key für Google Gemini AI
     
     // Email Service
-    RESEND_API_KEY: z.string().min(1),          // API-Key für Resend Email Service
+    RESEND_API_KEY: z.string().min(1).optional(),          // API-Key für Resend Email Service
     
     // Server Configuration
-    SERVER_URL: z.string().min(1),              // Basis-URL des Servers
+    SERVER_URL: z.string().min(1).optional(),              // Basis-URL des Servers
   },
   
   // Funktion zur Erstellung des finalen Schemas mit Transformation
