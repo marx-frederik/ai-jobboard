@@ -8,7 +8,7 @@ export const UserNotificationSettingsTable = pgTable(
   {
     userId: varchar()
       .primaryKey()
-      .references(() => UserTable.id),
+      .references(() => UserTable.id, {onDelete: "cascade"}),
     newJobEmailNotifications: boolean().notNull().default(false),
     aiPrompt: varchar(),
     createdAt,
