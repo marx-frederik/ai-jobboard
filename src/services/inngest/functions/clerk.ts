@@ -111,7 +111,7 @@ export const clerkDeleteUser = inngest.createFunction(
       }
     }) */
 
-    const userId = await step.run("create-user", async () => {
+    await step.run("delete-user", async () => {
       const id = event.data.data.id;
 
       if (id == null) {
