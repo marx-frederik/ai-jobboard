@@ -12,7 +12,7 @@ import { createdAt, id, updatedAt } from "../schemaHelpers"
 
 import { relations } from "drizzle-orm"
 import { JobListingApplicationTable } from "./jobListingApplication"
-import { OrganizationTable } from "./organization"
+import { OrganizationTable } from "./organizations"
 
 export const wageIntervals = ["hourly", "yearly"] as const
 export type WageInterval = (typeof wageIntervals)[number]
