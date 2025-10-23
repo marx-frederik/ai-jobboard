@@ -22,7 +22,7 @@ import Link from "next/link";
 
 type User = { name: string; imageUrl: string; email: string };
 
-export function SidebarUserButtonClient({user}:{user:User} ) {
+export function SidebarUserButtonClient({ user }: { user: User }) {
   const isMobile = useIsMobile();
   return (
     <DropdownMenu>
@@ -45,12 +45,7 @@ export function SidebarUserButtonClient({user}:{user:User} ) {
           <UserInfo {...user} />
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
-        <DropdownMenuItem
-        /* onClick={() => {
-            openUserProfile()
-            setOpenMobile(false)
-          }} */
-        >
+        <DropdownMenuItem>
           <UserIcon className="mr-1" /> Profile
         </DropdownMenuItem>
         <DropdownMenuItem asChild>
