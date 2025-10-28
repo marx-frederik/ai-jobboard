@@ -1,11 +1,14 @@
-import { inngest } from "@/services/inngest/client"
+import { inngest } from "@/services/inngest/client";
 import {
+  clerkCreateOrganization,
   clerkCreateUser,
+  clerkDeleteOrganization,
   clerkDeleteUser,
+  clerkUpdateOrganization,
   clerkUpdateUser,
-} from "@/services/inngest/functions/clerk"
+} from "@/services/inngest/functions/clerk";
 
-import { serve } from "inngest/next"
+import { serve } from "inngest/next";
 
 export const { GET, POST, PUT } = serve({
   client: inngest,
@@ -13,5 +16,8 @@ export const { GET, POST, PUT } = serve({
     clerkCreateUser,
     clerkUpdateUser,
     clerkDeleteUser,
+    clerkCreateOrganization,
+    clerkUpdateOrganization,
+    clerkDeleteOrganization,
   ],
-})
+});
