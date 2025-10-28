@@ -1,10 +1,7 @@
 import { ReactNode } from "react";
 import { AppSidebar } from "@/components/sidebar/AppSidebar";
 import { SidebarUserButton } from "../features/users/components/SidebarUserButton";
-import {
-  ClipboardListIcon,
-  Plus,
-} from "lucide-react";
+import { ClipboardListIcon, LayoutIcon, Plus } from "lucide-react";
 import SidebarNavMenuGroup from "@/components/sidebar/SidebarNavMenuGroup";
 import {
   SidebarGroup,
@@ -13,8 +10,12 @@ import {
 } from "@/components/ui/sidebar";
 import Link from "next/link";
 import { SidebarOrganizationButton } from "../features/organizations/components/components/SidebarOrganizationButton";
+import { auth } from "@clerk/nextjs/server";
+import { redirect } from "next/navigation";
 
-export default function EmployerLayout({ children }: { children: ReactNode }) {
+export default async function EmployerLayoutyout({ children }: { children: ReactNode }) {
+  const {orgId} = await auth()
+  if (orgId == null) return redirect("/organizations/select")
   return (
     <AppSidebar
       content={
