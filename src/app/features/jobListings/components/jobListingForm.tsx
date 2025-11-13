@@ -34,6 +34,7 @@ import {
 import { StateSelectItems } from "./StateSelectItems";
 import { ForwardRefEditor } from "@/components/markdown/MarkdownEditor";
 import { Button } from "@/components/ui/button";
+import LoadingSwap from "@/components/LoadingSwap";
 
 const NONE_SELECT_ITEM = "none";
 
@@ -281,7 +282,9 @@ export default function JobListingForm() {
           type="submit"
           className="w-full"
         >
+          <LoadingSwap isLoading={form.formState.isSubmitting}>
             Create Job Listing
+          </LoadingSwap>
         </Button>
       </form>
     </Form>
