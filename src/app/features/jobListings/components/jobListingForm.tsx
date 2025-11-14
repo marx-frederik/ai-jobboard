@@ -35,6 +35,9 @@ import { StateSelectItems } from "./StateSelectItems";
 import { ForwardRefEditor } from "@/components/markdown/MarkdownEditor";
 import { Button } from "@/components/ui/button";
 import LoadingSwap from "@/components/LoadingSwap";
+import { createJobListing } from "../actions/actions";
+import { Toaster } from "@/components/ui/sonner";
+import { toast } from "sonner";
 
 const NONE_SELECT_ITEM = "none";
 
@@ -55,8 +58,10 @@ export default function JobListingForm() {
   });
 
   async function onSubmit(data: z.infer<typeof jobListingSchema>) {
-    console.log(data);
-    await new Promise((res) => setTimeout(res, 1000));
+    const res = await createJobListing(data)
+    if(res.error){
+      toast.error(res.message)
+    }
   }
 
   return (
