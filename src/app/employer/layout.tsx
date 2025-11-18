@@ -23,7 +23,7 @@ export default async function EmployerLayoutyout({ children }: { children: React
           <SidebarGroup>
             <SidebarGroupLabel>Job Listings</SidebarGroupLabel>
             <SidebarGroupAction title="Add Job Listing" asChild>
-              <Link href="/employer/job-listing/new">
+              <Link href="/employer/job-listings/new">
                 <span className="sr-only">Add Lob Listing</span>
                 <Plus />
               </Link>
