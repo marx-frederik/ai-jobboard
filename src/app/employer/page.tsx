@@ -12,7 +12,7 @@ export default async function EmployerHomePage() {
   if (jobListing == null){
     redirect("/employer/job-listings/new")
   }else{
-    redirect(`emplyoer/job-listings/${jobListing.id}`)
+    redirect(`employer/job-listings/${jobListing.id}`)
   }
 }
 
