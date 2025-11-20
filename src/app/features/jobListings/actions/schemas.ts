@@ -14,7 +14,7 @@ export const jobListingSchema = z
     locationRequirement: z.enum(locationRequirements),
     type: z.enum(jobListingTypes),
     wage: z.number().int().positive().min(1,"Must be positive").nullable(),
-    wageInterval: z.enum(wageIntervals),
+    wageInterval: z.enum(wageIntervals).nullable(),
     stateAbbreviation: z
       .string()
       .transform((val) => (val.trim() === "" ? null : val))
