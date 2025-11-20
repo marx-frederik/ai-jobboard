@@ -40,7 +40,7 @@ export default async function JobListingPage({
       <div className="flex items-center gap-2 empty:-mt-4">
         {/* -mt-4 um bei leerem div die gap-4 von oben zu kontern */}
         <Button asChild variant="outline">
-          <Link href={`employer/job-listing/${jobListing.id}/edit`}>
+          <Link href={`/employer/job-listings/${jobListing.id}/edit`}>
             <EditIcon className="size-4" />
             Edit
           </Link>
