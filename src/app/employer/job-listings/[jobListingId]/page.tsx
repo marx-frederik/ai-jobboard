@@ -57,16 +57,6 @@ export default async function JobListingPage({
         dialogMarkdown={<MarkdownRenderer source={jobListing.description} />}
         dialogTitle="Description"
       />
-      {/* <MarkdownPartial
-        dialogMarkdown={<MarkdownRenderer source={jobListing.description} />}
-        mainMarkdown={
-          <MarkdownRenderer
-            className="prose-sm"
-            source={jobListing.description}
-          />
-        }
-        dialogTitle="Description"
-      /> */}
     </div>
   );
 }
