@@ -21,6 +21,7 @@ import {
 } from "@/components/ui/select";
 import {
   experienceLevels,
+  JobListingTable,
   jobListingTypes,
   locationRequirements,
   wageIntervals,
@@ -35,16 +36,32 @@ import { StateSelectItems } from "./StateSelectItems";
 import { ForwardRefEditor } from "@/components/markdown/MarkdownEditor";
 import { Button } from "@/components/ui/button";
 import LoadingSwap from "@/components/LoadingSwap";
-import { createJobListing } from "../actions/actions";
+import { createJobListing, updateJobListing } from "../actions/actions";
 import { Toaster } from "@/components/ui/sonner";
 import { toast } from "sonner";
 
 const NONE_SELECT_ITEM = "none";
 
-export default function JobListingForm() {
+export default function JobListingForm({
+  jobListing,
+}: {
+  jobListing: Pick<
+    typeof JobListingTable.$inferSelect,
+    | "title"
+    | "description"
+    | "experienceLevel"
+    | "id"
+    | "stateAbbreviation"
+    | "type"
+    | "wage"
+    | "wageInterval"
+    | "city"
+    | "locationRequirement"
+  >;
+}) {
   const form = useForm({
     resolver: zodResolver(jobListingSchema),
-    defaultValues: {
+    defaultValues: jobListing ?? {
       title: "",
       description: "",
       stateAbbreviation: null,
@@ -58,9 +75,12 @@ export default function JobListingForm() {
   });
 
   async function onSubmit(data: z.infer<typeof jobListingSchema>) {
-    const res = await createJobListing(data)
-    if(res.error){
-      toast.error(res.message)
+    const action = jobListing
+      ? updateJobListing.bind(null, jobListing.id)
+      : createJobListing;
+    const res = await action(data);
+    if (res.error) {
+      toast.error(res.message);
     }
   }
 
@@ -278,7 +298,7 @@ export default function JobListingForm() {
               <FormControl>
                 <ForwardRefEditor {...field} markdown={field.value} />
               </FormControl>
-              <FormMessage/>
+              <FormMessage />
             </FormItem>
           )}
         />
@@ -288,7 +308,7 @@ export default function JobListingForm() {
           className="w-full"
         >
           <LoadingSwap isLoading={form.formState.isSubmitting}>
-            Create Job Listing
+            {jobListing ? "Update Job Listing" : "Create Job Listing"}
           </LoadingSwap>
         </Button>
       </form>
