@@ -2,17 +2,13 @@
 import { ReactNode, useEffect, useLayoutEffect, useRef, useState } from "react";
 import {
   Dialog,
-  DialogClose,
   DialogContent,
-  DialogDescription,
-  DialogFooter,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
 } from "../ui/dialog";
 
 import { Button } from "../ui/button";
-import { Label } from "../ui/label";
 
 export function MarkdownPartial({
   mainMarkdown,
