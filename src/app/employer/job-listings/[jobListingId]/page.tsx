@@ -9,6 +9,8 @@ import JobListingBadges from "@/app/features/jobListings/components/jobListingBa
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { EditIcon } from "lucide-react";
+import MarkdownRenderer from "@/components/markdown/MarkdownRenderer";
+import {MarkdownPartial} from "@/components/markdown/MarkdownPartial";
 
 export default async function JobListingPage({
   params,
@@ -45,6 +47,26 @@ export default async function JobListingPage({
         </Button>
       </div>
       <div></div>
+      <MarkdownPartial
+        mainMarkdown={
+          <MarkdownRenderer
+            source={jobListing.description}
+            className="prose-sm"
+          />
+        }
+        dialogMarkdown={<MarkdownRenderer source={jobListing.description} />}
+        dialogTitle="Description"
+      />
+      {/* <MarkdownPartial
+        dialogMarkdown={<MarkdownRenderer source={jobListing.description} />}
+        mainMarkdown={
+          <MarkdownRenderer
+            className="prose-sm"
+            source={jobListing.description}
+          />
+        }
+        dialogTitle="Description"
+      /> */}
     </div>
   );
 }
