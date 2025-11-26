@@ -24,6 +24,13 @@ async function getPublishedJobListingsCount(orgId: string) {
   const [res] = await db
     .select({ count: count() })
     .from(JobListingTable)
-    .where(and(eq(JobListingTable.organizationId, orgId)));
+    .where(
+      and(
+        eq(JobListingTable.organizationId, orgId),
+        eq(JobListingTable.status, "published")
+      )
+    );
+  return res?.count ?? 0;
+}
   return res?.count ?? 0;
 }
