@@ -12,7 +12,7 @@ import { eq, and } from "drizzle-orm";
 import { JobListingTable } from "@/drizzle/schema";
 import { hasOrgUserPermission } from "@/services/clerk/lib/orgUserPermissions";
 import { getNextJobListingStatus } from "../lib/utils";
-import { hasReachedMaxPublishedJobListings } from "../lib/planFeatureHelpers";
+import { hasReachedMaxFeaturedJobListings, hasReachedMaxPublishedJobListings } from "../lib/planFeatureHelpers";
 import { revalidatePath } from "next/cache";
 
 export async function createJobListing(
@@ -89,7 +89,7 @@ export async function getJobListing(
 export async function toggleJobListingStatus(id: string) {
   const error = {
     error: true,
-    message: "You don't have permission to create a job listing",
+    message: "You don't have permission to change the status.",
   };
   const { orgId } = await auth();
   if (
@@ -112,6 +112,33 @@ export async function toggleJobListingStatus(id: string) {
       newStatus === "published" && jobListing.postedAt == null
         ? new Date()
         : undefined,
+  });
+  //TODO: insert cache tag system
+  revalidatePath(`/employer/job-listings/${id}`)
+  return { error: false };
+}
+
+export async function toggleJobListingFeatured(id: string) {
+  const error = {
+    error: true,
+    message: "You don't have permission to change the featured status.",
+  };
+  const { orgId } = await auth();
+  if (
+    orgId == null ||
+    !(await hasOrgUserPermission("org:job_listing:job_listing_change_status"))
+  )
+    return error;
+
+  const jobListing = await getJobListing(id, orgId);
+  if (jobListing == null) return error;
+
+  const newFeaturedStatus = !jobListing.isFeatured
+
+  if(newFeaturedStatus && (await hasReachedMaxFeaturedJobListings())) return error
+
+  const updatedJobListing = await updateJobListingDb(id, {
+    isFeatured: newFeaturedStatus,
   });
   //TODO: insert cache tag system
   revalidatePath(`/employer/job-listings/${id}`)
