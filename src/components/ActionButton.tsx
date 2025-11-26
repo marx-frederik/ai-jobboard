@@ -22,8 +22,8 @@ export function ActionButton({
   ...props
 }: Omit<ComponentPropsWithRef<typeof Button>, "onClick"> & {
   action: () => Promise<{ error: boolean; message?: string }>;
-  requireAreYouSure: boolean;
-  areYouSureDescription: string;
+  requireAreYouSure?: boolean;
+  areYouSureDescription?: string;
 }) {
   const [isLoading, startTransition] = useTransition();
 
