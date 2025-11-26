@@ -11,6 +11,9 @@ import { db } from "@/drizzle/db";
 import { eq, and } from "drizzle-orm";
 import { JobListingTable } from "@/drizzle/schema";
 import { hasOrgUserPermission } from "@/services/clerk/lib/orgUserPermissions";
+import { getNextJobListingStatus } from "../lib/utils";
+import { hasReachedMaxPublishedJobListings } from "../lib/planFeatureHelpers";
+import { revalidatePath } from "next/cache";
 
 export async function createJobListing(
   unsafeData: z.infer<typeof jobListingSchema>
@@ -81,4 +84,36 @@ export async function getJobListing(
       eq(JobListingTable.organizationId, organizationId)
     ),
   });
+}
+
+export async function toggleJobListingStatus(id: string) {
+  const error = {
+    error: true,
+    message: "You don't have permission to create a job listing",
+  };
+  const { orgId } = await auth();
+  if (
+    orgId == null ||
+    !(await hasOrgUserPermission("org:job_listing:job_listing_change_status"))
+  )
+    return error;
+
+  const jobListing = await getJobListing(id, orgId);
+  if (jobListing == null) return error;
+
+  const newStatus = getNextJobListingStatus(jobListing.status);
+  if (newStatus == "published" && (await hasReachedMaxPublishedJobListings()))
+    return error;
+
+  const updatedJobListing = await updateJobListingDb(id, {
+    status: newStatus,
+    isFeatured: newStatus === "published" ? undefined : false, //if we unpublish a job listing we dont want it to be featured anymore
+    postedAt:
+      newStatus === "published" && jobListing.postedAt == null
+        ? new Date()
+        : undefined,
+  });
+  //TODO: insert cache tag system
+  revalidatePath(`/employer/job-listings/${id}`)
+  return { error: false };
 }
