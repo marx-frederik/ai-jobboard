@@ -5,9 +5,9 @@ type PlanFeature =
   | "1_featured_job_listing"
   | "post_15_job_listings"
   | "post_3_job_listings"
-  | "post_1_job_listings"
+  | "post_1_job_listing"
 
-export async function hasPlanFeature(feature: PlanFeature) {
+export async function hasPlanFeature(feature: PlanFeature){
   const { has } = await auth();
   return has({ feature });
 }
