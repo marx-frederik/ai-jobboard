@@ -14,9 +14,15 @@ import { MarkdownPartial } from "@/components/markdown/MarkdownPartial";
 import AsyncIf from "@/components/AsyncIf";
 import { hasOrgUserPermission } from "@/services/clerk/lib/orgUserPermissions";
 import { getNextJobListingStatus } from "@/app/features/jobListings/lib/utils";
-import { hasPlanFeature } from "@/services/clerk/lib/planFeatures";
-import { hasReachedMaxFeaturedJobListings } from "@/app/features/jobListings/lib/planFeatureHelpers";
-import { Popover, PopoverTrigger, PopoverContent } from "@/components/ui/popover";
+import { hasReachedMaxPublishedJobListings } from "@/app/features/jobListings/lib/planFeatureHelpers";
+import {
+  Popover,
+  PopoverTrigger,
+  PopoverContent,
+} from "@/components/ui/popover";
+import { ReactNode } from "react";
+import { ActionButton } from "@/components/ActionButton";
+import { toggleJobListingStatus } from "@/app/features/jobListings/actions/actions";
 
 export default async function JobListingPage({
   params,
@@ -57,7 +63,7 @@ export default async function JobListingPage({
             </Link>
           </Button>
         </AsyncIf>
-        <StatusUpdateButton status={jobListing.status} />
+        <StatusUpdateButton status={jobListing.status} id={jobListing.id} />
       </div>
       <div></div>
       <MarkdownPartial
@@ -74,12 +80,22 @@ export default async function JobListingPage({
   );
 }
 
-function StatusUpdateButton({ status }: { status: JobListingStatus }) {
+function StatusUpdateButton({
+  status,
+  id,
+}: {
+  status: JobListingStatus;
+  id: string;
+}) {
   const button = (
-    <Button variant="outline">
-      <EditIcon className="size-4" />
-      Toggle
-    </Button>
+    <ActionButton
+      action={toggleJobListingStatus.bind(null, id)}
+      variant="outline"
+      requireAreYouSure={getNextJobListingStatus(status) === "published"}
+      areYouSureDescription="This will immedietly show the job listing to all users."
+    >
+      {statusToggleButtonText(status)}
+    </ActionButton>
   );
   return (
     <AsyncIf
@@ -90,23 +106,14 @@ function StatusUpdateButton({ status }: { status: JobListingStatus }) {
       {getNextJobListingStatus(status) === "published" ? (
         <AsyncIf
           condition={async () => {
-            const isMaxed = await hasReachedMaxFeaturedJobListings();
+            const isMaxed = await hasReachedMaxPublishedJobListings();
             return !isMaxed;
           }}
           otherwise={
-            <Popover>
-              <PopoverTrigger asChild>
-                <Button variant="outline">
-                  {statusToggleButtonText(status)}
-                </Button>
-              </PopoverTrigger>
-              <PopoverContent className="flex flex-col gap-2">
-                You must upgrade your plan to publish more job listings.
-                <Button asChild>
-                  <Link href="/employer/pricing">Upgrade Plan</Link>
-                </Button>
-              </PopoverContent>
-            </Popover>
+            <UpgradePopover
+              buttonText={statusToggleButtonText(status)}
+              popoverText="You must upgrade your plan to publish more job listings."
+            />
           }
         >
           {button}
@@ -115,6 +122,28 @@ function StatusUpdateButton({ status }: { status: JobListingStatus }) {
         button
       )}
     </AsyncIf>
+  );
+}
+
+function UpgradePopover({
+  buttonText,
+  popoverText,
+}: {
+  buttonText: ReactNode;
+  popoverText: ReactNode;
+}) {
+  return (
+    <Popover>
+      <PopoverTrigger asChild>
+        <Button variant="outline">{buttonText}</Button>
+      </PopoverTrigger>
+      <PopoverContent className="flex flex-col gap-2">
+        {popoverText}
+        <Button asChild>
+          <Link href="/employer/pricing">Upgrade Plan</Link>
+        </Button>
+      </PopoverContent>
+    </Popover>
   );
 }
 
