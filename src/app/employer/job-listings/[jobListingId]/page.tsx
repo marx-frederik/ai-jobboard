@@ -8,13 +8,22 @@ import { formatJobListingStatus } from "@/app/features/jobListings/lib/formatter
 import JobListingBadges from "@/app/features/jobListings/components/jobListingBadges";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { EditIcon, EyeIcon, EyeOffIcon } from "lucide-react";
+import {
+  EditIcon,
+  EyeIcon,
+  EyeOffIcon,
+  StarIcon,
+  StarOffIcon,
+} from "lucide-react";
 import MarkdownRenderer from "@/components/markdown/MarkdownRenderer";
 import { MarkdownPartial } from "@/components/markdown/MarkdownPartial";
 import AsyncIf from "@/components/AsyncIf";
 import { hasOrgUserPermission } from "@/services/clerk/lib/orgUserPermissions";
 import { getNextJobListingStatus } from "@/app/features/jobListings/lib/utils";
-import { hasReachedMaxPublishedJobListings } from "@/app/features/jobListings/lib/planFeatureHelpers";
+import {
+  hasReachedMaxFeaturedJobListings,
+  hasReachedMaxPublishedJobListings,
+} from "@/app/features/jobListings/lib/planFeatureHelpers";
 import {
   Popover,
   PopoverTrigger,
@@ -22,7 +31,10 @@ import {
 } from "@/components/ui/popover";
 import { ReactNode } from "react";
 import { ActionButton } from "@/components/ActionButton";
-import { toggleJobListingStatus } from "@/app/features/jobListings/actions/actions";
+import {
+  toggleJobListingFeatured,
+  toggleJobListingStatus,
+} from "@/app/features/jobListings/actions/actions";
 
 export default async function JobListingPage({
   params,
@@ -64,6 +76,10 @@ export default async function JobListingPage({
           </Button>
         </AsyncIf>
         <StatusUpdateButton status={jobListing.status} id={jobListing.id} />
+        <FeaturedToggleButton
+          isFeatured={jobListing.isFeatured}
+          id={jobListing.id}
+        />
       </div>
       <div></div>
       <MarkdownPartial
@@ -125,6 +141,48 @@ function StatusUpdateButton({
   );
 }
 
+function FeaturedToggleButton({
+  isFeatured,
+  id,
+}: {
+  isFeatured: boolean
+  id: string
+}) {
+  const button = (
+    <ActionButton
+      action={toggleJobListingFeatured.bind(null, id)}
+      variant="outline"
+    >
+      {featuredToggleButtonText(isFeatured)}
+    </ActionButton>
+  )
+
+  return (
+    <AsyncIf
+      condition={() => hasOrgUserPermission("org:job_listing:job_listing_change_status")}
+    >
+      {isFeatured ? (
+        button
+      ) : (
+        <AsyncIf
+          condition={async () => {
+            const isMaxed = await hasReachedMaxFeaturedJobListings()
+            return !isMaxed
+          }}
+          otherwise={
+            <UpgradePopover
+              buttonText={featuredToggleButtonText(isFeatured)}
+              popoverText="You must upgrade your plan to feature more job listings."
+            />
+          }
+        >
+          {button}
+        </AsyncIf>
+      )}
+    </AsyncIf>
+  )
+}
+
 function UpgradePopover({
   buttonText,
   popoverText,
@@ -167,6 +225,23 @@ function statusToggleButtonText(status: JobListingStatus) {
     default:
       throw new Error(`Unknown status ${status satisfies never}`);
   }
+}
+
+function featuredToggleButtonText(isFeatured: boolean) {
+  if (isFeatured) {
+    return (
+      <>
+        <StarOffIcon className="size-4" />
+        Unfeature
+      </>
+    );
+  }
+  return (
+    <>
+      <StarIcon className="size-4" />
+      Feature
+    </>
+  );
 }
 
 export function getJobListing(jobListingId: string, organizationId: string) {
