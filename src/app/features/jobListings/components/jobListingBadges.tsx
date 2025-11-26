@@ -49,7 +49,7 @@ export default function JobListingBadges({
   } satisfies ComponentProps<typeof Badge>;
   return (
     <>
-      {!isFeatured && (
+      {isFeatured && (
         <Badge
           {...badgeProps}
           className={cn(
