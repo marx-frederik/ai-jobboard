@@ -14,6 +14,7 @@ import {
   EyeOffIcon,
   StarIcon,
   StarOffIcon,
+  Trash2Icon,
 } from "lucide-react";
 import MarkdownRenderer from "@/components/markdown/MarkdownRenderer";
 import { MarkdownPartial } from "@/components/markdown/MarkdownPartial";
@@ -32,6 +33,7 @@ import {
 import { ReactNode } from "react";
 import { ActionButton } from "@/components/ActionButton";
 import {
+  deleteJobListing,
   toggleJobListingFeatured,
   toggleJobListingStatus,
 } from "@/app/features/jobListings/actions/actions";
@@ -76,10 +78,26 @@ export default async function JobListingPage({
           </Button>
         </AsyncIf>
         <StatusUpdateButton status={jobListing.status} id={jobListing.id} />
-        <FeaturedToggleButton
-          isFeatured={jobListing.isFeatured}
-          id={jobListing.id}
-        />
+        {jobListing.status === "published" && (
+          <FeaturedToggleButton
+            isFeatured={jobListing.isFeatured}
+            id={jobListing.id}
+          />
+        )}
+        <AsyncIf
+          condition={() =>
+            hasOrgUserPermission("org:job_listing:job_listing_update")
+          }
+        >
+          <ActionButton
+            action={deleteJobListing.bind(null,jobListing.id)}
+            areYouSureDescription="Are you sure you want to delete this job listing"
+            requireAreYouSure
+          >
+            <Trash2Icon className="size-4" />
+            Delete
+          </ActionButton>
+        </AsyncIf>
       </div>
       <div></div>
       <MarkdownPartial
@@ -145,8 +163,8 @@ function FeaturedToggleButton({
   isFeatured,
   id,
 }: {
-  isFeatured: boolean
-  id: string
+  isFeatured: boolean;
+  id: string;
 }) {
   const button = (
     <ActionButton
@@ -155,19 +173,21 @@ function FeaturedToggleButton({
     >
       {featuredToggleButtonText(isFeatured)}
     </ActionButton>
-  )
+  );
 
   return (
     <AsyncIf
-      condition={() => hasOrgUserPermission("org:job_listing:job_listing_change_status")}
+      condition={() =>
+        hasOrgUserPermission("org:job_listing:job_listing_change_status")
+      }
     >
       {isFeatured ? (
         button
       ) : (
         <AsyncIf
           condition={async () => {
-            const isMaxed = await hasReachedMaxFeaturedJobListings()
-            return !isMaxed
+            const isMaxed = await hasReachedMaxFeaturedJobListings();
+            return !isMaxed;
           }}
           otherwise={
             <UpgradePopover
@@ -180,7 +200,7 @@ function FeaturedToggleButton({
         </AsyncIf>
       )}
     </AsyncIf>
-  )
+  );
 }
 
 function UpgradePopover({
