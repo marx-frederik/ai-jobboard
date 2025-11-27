@@ -5,6 +5,7 @@ import { auth } from "@clerk/nextjs/server";
 import {
   insertJobListing,
   updateJobListing as updateJobListingDb,
+  deleteJobListing as deleteJobListingDb,
 } from "../db/jobListing";
 import { redirect } from "next/navigation";
 import { db } from "@/drizzle/db";
@@ -143,4 +144,24 @@ export async function toggleJobListingFeatured(id: string) {
   //TODO: insert cache tag system
   revalidatePath(`/employer/job-listings/${id}`)
   return { error: false };
+}
+
+export async function deleteJobListing(id:string){
+  const error = {
+    error: true,
+    message: "You don't have permission to delete the job listing.",
+  };
+  const { orgId } = await auth();
+  if (
+    orgId == null ||
+    !(await hasOrgUserPermission("org:job_listing:job_listing_delete"))
+  )
+    return error;
+
+  const jobListing = await getJobListing(id, orgId);
+  if (jobListing == null) return error;
+
+  await deleteJobListingDb(id);
+  //TODO: insert cache tag system
+  redirect("/employer")
 }
