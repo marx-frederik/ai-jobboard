@@ -32,7 +32,7 @@ export async function createJobListing(
   if (!success)
     return {
       error: true,
-      message: "There is an error ccreating your job listing",
+      message: "There is an error creating your job listing",
     };
   const jobListing = await insertJobListing({
     organizationId: orgId,
@@ -142,7 +142,7 @@ export async function toggleJobListingFeatured(id: string) {
     isFeatured: newFeaturedStatus,
   });
   //TODO: insert cache tag system
-  revalidatePath(`/employer/job-listings/${id}`)
+  revalidatePath(`/employer/job-listings/${updatedJobListing.id}`)
   return { error: false };
 }
 
