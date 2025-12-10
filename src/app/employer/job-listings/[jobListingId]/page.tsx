@@ -86,11 +86,12 @@ export default async function JobListingPage({
         )}
         <AsyncIf
           condition={() =>
-            hasOrgUserPermission("org:job_listing:job_listing_update")
+            hasOrgUserPermission("org:job_listing:job_listing_delete")
           }
         >
           <ActionButton
             action={deleteJobListing.bind(null,jobListing.id)}
+            variant="destructive"
             areYouSureDescription="Are you sure you want to delete this job listing"
             requireAreYouSure
           >
