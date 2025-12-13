@@ -31,6 +31,7 @@
     "@t3-oss/env-nextjs": "^0.13.8",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
+    "date-fns": "^4.1.0",
     "docker": "^1.0.0",
     "inngest": "^3.44.3",
     "lucide-react": "^0.545.0",
