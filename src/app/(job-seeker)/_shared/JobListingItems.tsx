@@ -60,7 +60,7 @@ export async function JobListingItems({ searchParams, params }: Props) {
         <Link
           className="block"
           key={jobListing.id}
-          href={`job-listings/${jobListing.id}?${convertSearchParamsToString(
+          href={`/job-listings/${jobListing.id}?${convertSearchParamsToString(
             search
           )}`}
         >
@@ -151,7 +151,7 @@ function JobListingListItem({
   );
 }
 
-function DaysSincePosting({ postedAt }: { postedAt: string }) {
+export function DaysSincePosting({ postedAt }: { postedAt: string }) {
   const daysSincePosted = differenceInDays(postedAt, Date.now());
   if (daysSincePosted === 0) {
     return <Badge>New</Badge>;
