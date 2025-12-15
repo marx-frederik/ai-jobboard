@@ -13,7 +13,7 @@ export const jobListingSchema = z
     experienceLevel: z.enum(experienceLevels),
     locationRequirement: z.enum(locationRequirements),
     type: z.enum(jobListingTypes),
-    wage: z.number().int().positive().min(1,"Must be positive").nullable(),
+    wage: z.number().int().positive().min(1, "Must be positive").nullable(),
     wageInterval: z.enum(wageIntervals).nullable(),
     stateAbbreviation: z
       .string()
@@ -35,10 +35,19 @@ export const jobListingSchema = z
   )
   .refine(
     (data) => {
-      return data.locationRequirement === "remote" || data.stateAbbreviation != null;
+      return (
+        data.locationRequirement === "remote" || data.stateAbbreviation != null
+      );
     },
     {
       message: "Required for non-remote listings",
       path: ["stateAbbreviation"],
     }
   );
+
+export const jobListingApplicationFormSchema = z.object({
+  coverLetter: z
+    .string()
+    .nullable()
+    .transform((val) => (val?.trim() === " " ? null : val)),
+});
