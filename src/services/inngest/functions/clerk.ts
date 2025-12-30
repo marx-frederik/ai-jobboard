@@ -160,7 +160,7 @@ export const clerkCreateOrganization = inngest.createFunction(
 );
 
 export const clerkUpdateOrganization = inngest.createFunction(
-  { id: "clerk/update-db-user", name: "Clerk - Update DB Organization" },
+  { id: "clerk/update-db-organization", name: "Clerk - Update DB Organization" },
   {
     event: "clerk/organization.updated",
   },
