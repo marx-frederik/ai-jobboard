@@ -1,6 +1,9 @@
 @import "tailwindcss";
 @import "tw-animate-css";
-@plugin "@tailwindcss/typography"; 
+@plugin "@tailwindcss/typography";
+
+@import "uploadthing/tw/v4";
+@source "../../node_modules/@uploadthing/react/dist"; /** <-- depends on your project structure */
 
 @custom-variant dark (&:is(.dark *));
 
@@ -62,8 +65,8 @@
   --muted-foreground: oklch(0.556 0 0);
   --accent: oklch(0.97 0 0);
   --accent-foreground: oklch(0.205 0 0);
-  --featured: oklch(0.7 0.150 180.0);
-  --featured-foreground:oklch(0.7 0.150 180.0);
+  --featured: oklch(0.7 0.15 180);
+  --featured-foreground: oklch(0.7 0.15 180);
   --destructive: oklch(0.577 0.245 27.325);
   --border: oklch(0.922 0 0);
   --input: oklch(0.922 0 0);
@@ -135,9 +138,8 @@
   .mdxeditor-toolbar {
     @apply bg-card border-card rounded-md !rounded-b-none shadow-sm flex-wrap;
   }
-  
+
   .mdxeditor-popup-container {
     @apply !z-50;
   }
-  
 }
