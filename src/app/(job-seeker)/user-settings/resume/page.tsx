@@ -13,6 +13,7 @@ import Link from "next/link";
 import { db } from "@/drizzle/db";
 import { UserResumeTable } from "@/drizzle/schema";
 import { eq } from "drizzle-orm";
+import MarkdownRenderer from "@/components/markdown/MarkdownRenderer";
 
 export default function UserResumePage() {
   return (
@@ -56,6 +57,7 @@ async function AISummaryCard() {
   if (userId == null) return null;
   const userResume = await getUserResume(userId);
   if (userResume == null || userResume.aiSummary == null) return null;
+  
   return (
     <Card>
       <CardHeader>
@@ -65,6 +67,9 @@ async function AISummaryCard() {
           emploeyers to quickly understand your qulifications and experience.
         </CardDescription>
       </CardHeader>
+      <CardContent>
+        <MarkdownRenderer source={userResume.aiSummary}/>
+      </CardContent>
     </Card>
   );
 }
