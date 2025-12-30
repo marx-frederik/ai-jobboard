@@ -20,7 +20,7 @@ export default function SidebarNavMenuGroup({
     label: string;
     href: string;
   }[];
-  className: string;
+  className?: string;
 }) {
   const pathname = usePathname();
   return (
