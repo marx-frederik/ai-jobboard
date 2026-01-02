@@ -33,7 +33,7 @@ import {
   formatWageInterval,
 } from "../lib/formatters";
 import { StateSelectItems } from "./StateSelectItems";
-import { ForwardRefEditor } from "@/components/markdown/MarkdownEditor";
+import { MarkdownEditor } from "@/components/markdown/MarkdownEditor";
 import { Button } from "@/components/ui/button";
 import LoadingSwap from "@/components/LoadingSwap";
 import { createJobListing, updateJobListing } from "../actions/actions";
@@ -296,7 +296,7 @@ export default function JobListingForm({
           render={({ field }) => (
             <FormItem>
               <FormControl>
-                <ForwardRefEditor {...field} markdown={field.value} />
+                <MarkdownEditor {...field} markdown={field.value} />
               </FormControl>
               <FormMessage />
             </FormItem>
