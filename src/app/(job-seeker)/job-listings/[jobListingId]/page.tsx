@@ -70,7 +70,7 @@ export default function JobListingDetailPage({
           breakpoint="min-width: 1024px"
           otherwise={
             <ClientSheet>
-              <SheetContent hideCloseButton className="p-4">
+              <SheetContent hideCloseButton className="p-4 overflow-y-auto">
                 <SheetHeader className="sr-only">
                   <SheetTitle>Job Listing Details</SheetTitle>
                 </SheetHeader>
@@ -163,13 +163,10 @@ async function JobListingDetails({
       <div className="flex flex-wrap gap-2 mt-2">
         <JobListingBadges jobListing={jobListing} />
       </div>
-      {/* TODO: Apply Button */}
-
-      <MarkdownRenderer source={jobListing.description} />
-
       <Suspense fallback={<Button disabled>Apply</Button>}>
         <ApplyButton jobListingId={jobListingId} />
       </Suspense>
+      <MarkdownRenderer source={jobListing.description} className="overflow-auto prose-sm" />
     </div>
   );
 }
@@ -226,23 +223,20 @@ async function ApplyButton({ jobListingId }: { jobListingId: string }) {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button>
-            Apply
-        </Button>
+        <Button>Apply</Button>
       </DialogTrigger>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>Application</DialogTitle>
-            <DialogDescription>
-              Applying for a job cannot be undone and can only be done once per
-              job listing
-            </DialogDescription>
-          </DialogHeader>
-          <div className="flex-1 over overflow-y-autp">
-            <JobListingApplicationForm jobListingId={jobListingId} />
-          </div>
-        </DialogContent>
-      
+      <DialogContent>
+        <DialogHeader>
+          <DialogTitle>Application</DialogTitle>
+          <DialogDescription>
+            Applying for a job cannot be undone and can only be done once per
+            job listing
+          </DialogDescription>
+        </DialogHeader>
+        <div className="flex-1">
+          <JobListingApplicationForm jobListingId={jobListingId} />
+        </div>
+      </DialogContent>
     </Dialog>
   );
 }
