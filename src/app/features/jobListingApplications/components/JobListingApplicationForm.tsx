@@ -36,6 +36,7 @@ export default function JobListingApplicationForm({
     if (results.error) {
       toast.error(results.message);
     }
+    toast.success(results.message);
   }
 
   return (

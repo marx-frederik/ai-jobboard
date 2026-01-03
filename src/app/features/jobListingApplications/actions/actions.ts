@@ -1,4 +1,4 @@
-"use server"
+"use server";
 import z from "zod";
 import { jobListingApplicationFormSchema } from "../../jobListings/actions/schemas";
 import { db } from "@/drizzle/db";
@@ -26,21 +26,26 @@ export async function createJobListingApplication({
 
   if (userResume == null || jobListing == null) return permissionError;
 
-  const { success, data } = jobListingApplicationFormSchema.safeParse(unsafeData);
+  const { success, data } =
+    jobListingApplicationFormSchema.safeParse(unsafeData);
 
-  if(!success)return{error:true,message:"There was an error submitting your application"}
+  if (!success)
+    return {
+      error: true,
+      message: "There was an error submitting your application",
+    };
 
-//TODO: AI generation
-await inngest.send({
-    name:"app/jobListingApplication.created",
-    data:{jobListingId, userId}
-})
+  /* AI generation */
+  await inngest.send({
+    name: "app/jobListingApplication.created",
+    data: { jobListingId, userId },
+  });
 
-  await insertJobListingApplication({jobListingId, userId, ...data})
-  return{
-    error:false,
-    message:"Your application was successfully submitted"
-  }
+  await insertJobListingApplication({ jobListingId, userId, ...data });
+  return {
+    error: false,
+    message: "Your application was successfully submitted",
+  };
 }
 
 async function getPublicJobListing(id: string) {
