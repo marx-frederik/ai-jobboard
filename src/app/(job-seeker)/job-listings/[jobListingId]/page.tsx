@@ -205,7 +205,7 @@ async function ApplyButton({ jobListingId }: { jobListingId: string }) {
   }
 
   const userResume = await getUserResume({ userId });
-  /* if (userResume == null) {
+  if (userResume == null) {
     return (
       <Popover>
         <PopoverTrigger asChild>
@@ -219,13 +219,13 @@ async function ApplyButton({ jobListingId }: { jobListingId: string }) {
         </PopoverContent>
       </Popover>
     );
-  } */
+  }
   return (
     <Dialog>
       <DialogTrigger asChild>
         <Button>Apply</Button>
       </DialogTrigger>
-      <DialogContent>
+      <DialogContent className="md:max-w-3xl max-h-[calc(100%-2rem)] overflow-hidden flex flex-col">
         <DialogHeader>
           <DialogTitle>Application</DialogTitle>
           <DialogDescription>
@@ -233,7 +233,7 @@ async function ApplyButton({ jobListingId }: { jobListingId: string }) {
             job listing
           </DialogDescription>
         </DialogHeader>
-        <div className="flex-1">
+        <div className="flex-1 overflow-y-auto">
           <JobListingApplicationForm jobListingId={jobListingId} />
         </div>
       </DialogContent>
