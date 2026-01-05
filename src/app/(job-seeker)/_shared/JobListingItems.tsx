@@ -44,11 +44,11 @@ const searchParamsSchema = z.object({
 
 export async function JobListingItems({ searchParams, params }: Props) {
   const jobListingId = params ? (await params).jobListingId : undefined;
-  const jobListings = await getJobListings(await searchParams, jobListingId);
   const { success, data } = searchParamsSchema.safeParse(await searchParams);
-
+  
   const search = success ? data : {};
-
+  
+  const jobListings = await getJobListings(await search, jobListingId);
   if (jobListings.length === 0) {
     return (
       <div className="text-muted-foreground p-4">No job listings found</div>
