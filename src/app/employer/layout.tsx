@@ -1,6 +1,6 @@
 import { ReactNode } from "react";
 import { AppSidebar } from "@/components/sidebar/AppSidebar";
-import { SidebarUserButton } from "../features/users/components/SidebarUserButton";
+import { SidebarUserButton } from "../../features/users/components/SidebarUserButton";
 import { ClipboardListIcon, LayoutIcon, Plus, PlusIcon } from "lucide-react";
 import SidebarNavMenuGroup from "@/components/sidebar/SidebarNavMenuGroup";
 import {
@@ -13,7 +13,7 @@ import {
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
 import Link from "next/link";
-import { SidebarOrganizationButton } from "../features/organizations/components/components/SidebarOrganizationButton";
+import { SidebarOrganizationButton } from "../../features/organizations/components/components/SidebarOrganizationButton";
 import { auth } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
 import AsyncIf from "@/components/AsyncIf";
@@ -25,7 +25,7 @@ import {
   JobListingTable,
 } from "@/drizzle/schema";
 import { count, desc, eq } from "drizzle-orm";
-import { sortJobListingByStatus } from "../features/jobListings/lib/utils";
+import { sortJobListingByStatus } from "../../features/jobListings/lib/utils";
 import { JobListingMenuGroup } from "./_JobListingMenuGroup";
 
 export default async function EmployerLayoutyout({

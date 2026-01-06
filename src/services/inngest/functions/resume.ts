@@ -3,7 +3,7 @@ import { inngest } from "../client";
 import { eq } from "drizzle-orm";
 import { UserResumeTable } from "@/drizzle/schema";
 import { env } from "@/data/env/server";
-import { updateUserResume } from "@/app/features/users/db/userResume";
+import { updateUserResume } from "@/features/users/db/userResume";
 export const createAiSummaryOfUploadedResume = inngest.createFunction(
   {
     id: "create-id-summary-of-uploaded-resume",

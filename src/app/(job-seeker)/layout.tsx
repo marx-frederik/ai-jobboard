@@ -1,6 +1,6 @@
 import { ReactNode } from "react";
 import { AppSidebar } from "@/components/sidebar/AppSidebar";
-import { SidebarUserButton } from "../features/users/components/SidebarUserButton";
+import { SidebarUserButton } from "../../features/users/components/SidebarUserButton";
 import {
   BrainCircuitIcon,
   Brain,

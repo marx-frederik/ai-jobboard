@@ -18,7 +18,7 @@ import {
   CollapsibleTrigger,
 } from "@radix-ui/react-collapsible";
 import { useParams } from "next/navigation";
-import { formatJobListingStatus } from "../features/jobListings/lib/formatters";
+import { formatJobListingStatus } from "../../features/jobListings/lib/formatters";
 import { ChevronRightIcon } from "lucide-react";
 import Link from "next/link";
 

@@ -21,7 +21,7 @@ import {
 } from "../../_shared/JobListingItems";
 import { notFound } from "next/navigation";
 import { ClientSheet } from "./_ClientSheet";
-import JobListingBadges from "@/app/features/jobListings/components/jobListingBadges";
+import JobListingBadges from "@/features/jobListings/components/jobListingBadges";
 import MarkdownRenderer from "@/components/markdown/MarkdownRenderer";
 import { Button } from "@/components/ui/button";
 import { convertSearchParamsToString } from "@/lib/convertSearchParamsToString";
@@ -43,7 +43,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import JobListingApplicationForm from "@/app/features/jobListingApplications/components/JobListingApplicationForm";
+import JobListingApplicationForm from "@/features/jobListingApplications/components/JobListingApplicationForm";
 
 export default function JobListingDetailPage({
   params,

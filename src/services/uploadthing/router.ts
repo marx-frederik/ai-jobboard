@@ -2,7 +2,7 @@ import { createUploadthing, type FileRouter } from "uploadthing/next";
 import { UploadThingError } from "uploadthing/server";
 import getCurrentUser from "../clerk/lib/getCurrentUser";
 import { inngest } from "../inngest/client";
-import { upsertUserResume } from "@/app/features/users/db/userResume";
+import { upsertUserResume } from "@/features/users/db/userResume";
 import { db } from "@/drizzle/db";
 import {eq} from "drizzle-orm"
 import { UserResumeTable } from "@/drizzle/schema";

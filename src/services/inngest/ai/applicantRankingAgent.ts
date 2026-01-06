@@ -1,4 +1,4 @@
-import { updateJobListingApplication } from "@/app/features/jobListingApplications/db/jobListingApplication";
+import { updateJobListingApplication } from "@/features/jobListingApplications/db/jobListingApplication";
 import { env } from "@/data/env/server";
 import { createAgent, createTool, gemini } from "@inngest/agent-kit";
 import z from "zod";

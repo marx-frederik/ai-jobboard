@@ -1,4 +1,4 @@
-import JobListingAiSearchForm from "@/app/features/jobListings/components/JobListingAiSearchForm";
+import JobListingAiSearchForm from "@/features/jobListings/components/JobListingAiSearchForm";
 import AsyncIf from "@/components/AsyncIf";
 import LoadingSwap from "@/components/LoadingSwap";
 import {

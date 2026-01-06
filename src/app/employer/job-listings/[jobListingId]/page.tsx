@@ -4,8 +4,8 @@ import { db } from "@/drizzle/db";
 import { eq, and } from "drizzle-orm";
 import { notFound } from "next/navigation";
 import { Badge } from "@/components/ui/badge";
-import { formatJobListingStatus } from "@/app/features/jobListings/lib/formatters";
-import JobListingBadges from "@/app/features/jobListings/components/jobListingBadges";
+import { formatJobListingStatus } from "@/features/jobListings/lib/formatters";
+import JobListingBadges from "@/features/jobListings/components/jobListingBadges";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import {
@@ -20,11 +20,11 @@ import MarkdownRenderer from "@/components/markdown/MarkdownRenderer";
 import { MarkdownPartial } from "@/components/markdown/MarkdownPartial";
 import AsyncIf from "@/components/AsyncIf";
 import { hasOrgUserPermission } from "@/services/clerk/lib/orgUserPermissions";
-import { getNextJobListingStatus } from "@/app/features/jobListings/lib/utils";
+import { getNextJobListingStatus } from "@/features/jobListings/lib/utils";
 import {
   hasReachedMaxFeaturedJobListings,
   hasReachedMaxPublishedJobListings,
-} from "@/app/features/jobListings/lib/planFeatureHelpers";
+} from "@/features/jobListings/lib/planFeatureHelpers";
 import {
   Popover,
   PopoverTrigger,
@@ -36,7 +36,7 @@ import {
   deleteJobListing,
   toggleJobListingFeatured,
   toggleJobListingStatus,
-} from "@/app/features/jobListings/actions/actions";
+} from "@/features/jobListings/actions/actions";
 
 export default async function JobListingPage({
   params,

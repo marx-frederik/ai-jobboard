@@ -1,4 +1,4 @@
-import JobListingForm from "@/app/features/jobListings/components/jobListingForm";
+import JobListingForm from "@/features/jobListings/components/jobListingForm";
 import { Card, CardContent } from "@/components/ui/card";
 import { notFound } from "next/navigation";
 import getCurrentOrganization from "@/services/clerk/lib/getCurrentOrganization";

@@ -6,13 +6,13 @@ import {
   deleteUser,
   insertUser,
   updateUser,
-} from "@/app/features/users/db/user";
-import { insertUserNotificationSettings } from "@/app/features/users/db/userNotification";
+} from "@/features/users/db/user";
+import { insertUserNotificationSettings } from "@/features/users/db/userNotification";
 import {
   insertOrganization,
   deleteOrganization,
   updateOrganization,
-} from "@/app/features/organizations/db/organization";
+} from "@/features/organizations/db/organization";
 
 function verifyWebhook({
   raw,

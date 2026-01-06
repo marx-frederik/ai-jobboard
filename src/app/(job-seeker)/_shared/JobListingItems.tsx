@@ -21,7 +21,7 @@ import Link from "next/link";
 import z from "zod";
 import { differenceInDays } from "date-fns";
 import { Badge } from "@/components/ui/badge";
-import JobListingBadges from "@/app/features/jobListings/components/jobListingBadges";
+import JobListingBadges from "@/features/jobListings/components/jobListingBadges";
 
 type Props = {
   searchParams: Promise<Record<string, string | string[]>>;

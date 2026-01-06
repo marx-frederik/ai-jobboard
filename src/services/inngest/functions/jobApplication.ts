@@ -1,7 +1,7 @@
 import { db } from "@/drizzle/db";
 import { inngest } from "../client";
 import { eq, and } from "drizzle-orm";
-import JobListingApplicationForm from "@/app/features/jobListingApplications/components/JobListingApplicationForm";
+import JobListingApplicationForm from "@/features/jobListingApplications/components/JobListingApplicationForm";
 import {
   JobListingApplicationTable,
   JobListingTable,
