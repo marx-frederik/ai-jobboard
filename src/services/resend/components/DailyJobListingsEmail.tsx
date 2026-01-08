@@ -1,0 +1,137 @@
+import { JobListingTable } from "@/drizzle/schema";
+import {
+  Body,
+  Button,
+  Container,
+  Head,
+  Heading,
+  Html,
+  Section,
+  Tailwind,
+  Text,
+} from "@react-email/components";
+import {
+  formatExperienceLevel,
+  formatJobListingLocation,
+  formatJobType,
+  formatLocationRequirement,
+  formatWage,
+} from "@/features/jobListings/lib/formatters";
+
+//job listing related information
+type JobListing = Pick<
+  typeof JobListingTable.$inferSelect,
+  | "id"
+  | "title"
+  | "city"
+  | "stateAbbreviation"
+  | "type"
+  | "experienceLevel"
+  | "wage"
+  | "wageInterval"
+  | "locationRequirement"
+> & { organizationName: string };
+
+export default function DailyJobListingEmail({
+  jobListings,
+  serverUrl,
+  userName,
+}: {
+  userName: string;
+  jobListings: JobListing[];
+  serverUrl: string;
+}) {
+  return (
+    <Tailwind>
+      <Html>
+        <Head />
+        <Body>
+          <Container className="font-sans">
+            <Heading as="h1">New Job Listings</Heading>
+            <Text>
+              hi {userName}, here are all the new job listings for you.
+            </Text>
+            <Section>
+              {jobListings.map((listing) => (
+                <div
+                  key={listing.id}
+                  className="bg-card text-card-foreground rounded-lg border p-4 border-primary border-solid mb-6"
+                >
+                  <Text className="leading-none font-semibold text-xl my-0">
+                    {listing.title}
+                  </Text>
+                  <Text className="text-muted-foreground mb-2 mt-0">
+                    {listing.organizationName}
+                  </Text>
+                  <div className="mb-5 space-x-2">
+                    {getBadges(listing).map((badge, index) => (
+                      <div
+                        key={index}
+                        className="inline rounded-md border px-3 py-1 mb-1 mr-1 text-sm text-foreground"
+                      >
+                        {badge}
+                      </div>
+                    ))}
+                  </div>
+                  <Button
+                    href={`${serverUrl}/job-listing/${listing.id}`}
+                    className="border rounded-md text-sm font-medium focus-visible:border-ring bg-primary text-primary-foreground px-4 py-2"
+                  >
+                    View Details
+                  </Button>
+                </div>
+              ))}
+            </Section>
+          </Container>
+        </Body>
+      </Html>
+    </Tailwind>
+  );
+}
+
+function getBadges(jobListing: JobListing) {
+  const badges = [
+    formatLocationRequirement(jobListing.locationRequirement),
+    formatJobType(jobListing.type),
+    formatExperienceLevel(jobListing.experienceLevel),
+  ];
+  if (jobListing.city != null || jobListing.stateAbbreviation != null) {
+    badges.unshift(formatJobListingLocation(jobListing));
+  }
+
+  if (jobListing.wage != null && jobListing.wageInterval != null) {
+    badges.unshift(formatWage(jobListing.wage, jobListing.wageInterval));
+  }
+  return badges;
+}
+
+DailyJobListingEmail.PreviewProps = {
+  jobListings: [
+    {
+      city: "Omaha",
+      stateAbbreviation: "NE",
+      title: "Frontend Developer",
+      wage: null,
+      wageInterval: null,
+      experienceLevel: "senior",
+      type: "part-time",
+      id: crypto.randomUUID(),
+      organizationName: "Web Dev Simplified",
+      locationRequirement: "in-office",
+    },
+    {
+      city: null,
+      stateAbbreviation: null,
+      title: "Software Engineer",
+      wage: 100000,
+      wageInterval: "yearly",
+      experienceLevel: "mid-level",
+      type: "full-time",
+      id: crypto.randomUUID(),
+      organizationName: "Google",
+      locationRequirement: "remote",
+    },
+  ],
+  userName: "John Doe",
+  serverUrl: "http://localhost:3000",
+} satisfies Parameters<typeof DailyJobListingEmail>[0];

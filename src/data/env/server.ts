@@ -28,7 +28,7 @@ export const env = createEnv({
     RESEND_API_KEY: z.string().min(1).optional(),          // API-Key für Resend Email Service
     
     // Server Configuration
-    SERVER_URL: z.string().min(1).optional(),              // Basis-URL des Servers
+    SERVER_URL: z.string().min(1),              // Basis-URL des Servers
   },
   
   // Funktion zur Erstellung des finalen Schemas mit Transformation
