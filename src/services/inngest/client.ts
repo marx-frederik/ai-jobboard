@@ -22,6 +22,8 @@ type Events = {
   "clerk/organization.created": ClerkWebhookData<OrganizationJSON>;
   "clerk/organization.updated": ClerkWebhookData<OrganizationJSON>;
   "clerk/organization.deleted": ClerkWebhookData<DeletedObjectJSON>;
+  "clerk/organizationMembership.created": ClerkWebhookData<OrganizationMembershipJSON>;
+  "clerk/organizationMembership.deleted": ClerkWebhookData<OrganizationMembershipJSON>;
   "app/jobListingApplication.created": {
     data: {
       jobListingId: string;
@@ -40,6 +42,24 @@ type Events = {
         typeof JobListingTable.$inferSelect,
         "createdAt" | "postedAt" | "updatedAt" | "status" | "organizationId"
       > & { organizationName: string })[];
+    };
+  };
+  "app/email.daily-organisation-user-applications": {
+    data: {
+      applications: (Pick<
+        typeof JobListingApplicationTable.$inferSelect,
+        "rating"
+      > & {
+        userName: string;
+        organizationId: string;
+        organizationName: string;
+        jobListingId: string;
+        jobListingTitle: string;
+      })[];
+    };
+    user: {
+      email: string;
+      name: string;
     };
   };
 };

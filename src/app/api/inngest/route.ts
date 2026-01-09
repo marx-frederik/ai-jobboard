@@ -1,13 +1,20 @@
 import { inngest } from "@/services/inngest/client";
 import {
   clerkCreateOrganization,
+  clerkCreateOrgMembership,
   clerkCreateUser,
   clerkDeleteOrganization,
+  clerkDeleteOrgMembership,
   clerkDeleteUser,
   clerkUpdateOrganization,
   clerkUpdateUser,
 } from "@/services/inngest/functions/clerk";
-import { prepareDailyUserJobListingNotifications, sendDailyUserJobListingEmail } from "@/services/inngest/functions/email";
+import {
+  prepareDailyOrganizationUserApplicationNotifications,
+  prepareDailyUserJobListingNotifications,
+  sendDailyOrganisationUserApplicationEmail,
+  sendDailyUserJobListingEmail,
+} from "@/services/inngest/functions/email";
 import { rankApplication } from "@/services/inngest/functions/jobApplication";
 import { createAiSummaryOfUploadedResume } from "@/services/inngest/functions/resume";
 
@@ -22,9 +29,13 @@ export const { GET, POST, PUT } = serve({
     clerkCreateOrganization,
     clerkUpdateOrganization,
     clerkDeleteOrganization,
+    clerkCreateOrgMembership,
+    clerkDeleteOrgMembership,
     createAiSummaryOfUploadedResume,
     rankApplication,
     prepareDailyUserJobListingNotifications,
     sendDailyUserJobListingEmail,
+    prepareDailyOrganizationUserApplicationNotifications,
+    sendDailyOrganisationUserApplicationEmail,
   ],
 });
