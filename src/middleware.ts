@@ -15,4 +15,10 @@ export const config = {
   ],
 };
 
-const isPublicRoute = createRouteMatcher(["/sign-in(.*)", "/", "/api(.*)"]);
+const isPublicRoute = createRouteMatcher([
+  "/sign-in(.*)",
+  "/",
+  "/api(.*)",
+  "/job-listings(.*)",
+  "/ai-search",
+]);
