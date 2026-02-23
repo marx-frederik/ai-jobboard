@@ -20,6 +20,8 @@ export const env = createEnv({
     // File Upload Service
     UPLOADTHING_TOKEN: z.string().min(1).optional(),       // API-Token für UploadThing Service
     
+    INNGEST_EVENT_KEY: z.string().min(1).optional(),       // API-Token für UploadThing Service
+    
     // AI/ML API Keys
     ANTHROPIC_API_KEY: z.string().min(1).optional(),       // API-Key für Anthropic (Claude AI)
     GEMINI_API_KEY: z.string().min(1).optional(),          // API-Key für Google Gemini AI

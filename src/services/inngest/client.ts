@@ -1,3 +1,4 @@
+import { env } from "@/data/env/server";
 import { JobListingApplicationTable, JobListingTable } from "@/drizzle/schema";
 import {
   DeletedObjectJSON,
@@ -67,4 +68,5 @@ type Events = {
 export const inngest = new Inngest({
   id: "Ai-jobboard",
   schemas: new EventSchemas().fromRecord<Events>(),
+  eventKey: env.INNGEST_EVENT_KEY,
 });
