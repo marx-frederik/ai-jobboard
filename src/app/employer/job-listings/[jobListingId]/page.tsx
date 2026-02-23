@@ -1,4 +1,8 @@
-import { JobListingStatus, JobListingTable } from "@/drizzle/schema";
+import {
+  JobListingApplicationTable,
+  JobListingStatus,
+  JobListingTable,
+} from "@/drizzle/schema";
 import { auth } from "@clerk/nextjs/server";
 import { db } from "@/drizzle/db";
 import { eq, and } from "drizzle-orm";
@@ -30,13 +34,15 @@ import {
   PopoverTrigger,
   PopoverContent,
 } from "@/components/ui/popover";
-import { ReactNode } from "react";
+import { ReactNode, Suspense } from "react";
 import { ActionButton } from "@/components/ActionButton";
 import {
   deleteJobListing,
   toggleJobListingFeatured,
   toggleJobListingStatus,
 } from "@/features/jobListings/actions/actions";
+import { ApplicationTable } from "@/features/jobListingApplications/components/ApplicationTable";
+import { Separator } from "@/components/ui/separator";
 
 export default async function JobListingPage({
   params,
@@ -90,7 +96,7 @@ export default async function JobListingPage({
           }
         >
           <ActionButton
-            action={deleteJobListing.bind(null,jobListing.id)}
+            action={deleteJobListing.bind(null, jobListing.id)}
             variant="destructive"
             areYouSureDescription="Are you sure you want to delete this job listing"
             requireAreYouSure
@@ -111,6 +117,15 @@ export default async function JobListingPage({
         dialogMarkdown={<MarkdownRenderer source={jobListing.description} />}
         dialogTitle="Description"
       />
+
+      <Separator />
+
+      <div className="space-y-6">
+        <h2 className="text-xl font-semibold">Applications</h2>
+        <Suspense fallback={<SkelletonApplicationTable />}>
+          <Applications jobListingId={jobListingId} />
+        </Suspense>
+      </div>
     </div>
   );
 }
@@ -272,4 +287,72 @@ export function getJobListing(jobListingId: string, organizationId: string) {
       eq(JobListingTable.organizationId, organizationId)
     ),
   });
+}
+
+async function Applications({ jobListingId }: { jobListingId: string }) {
+  const applications = await getJobListingApplications(jobListingId);
+  return (
+    <ApplicationTable
+      applications={applications.map((a) => ({
+        ...a,
+        user: {
+          ...a.user,
+          resume: a.user.resume
+            ? {
+                ...a.user.resume,
+                markdownSummary: a.user.resume.aiSummary ? (
+                  <MarkdownRenderer source={a.user.resume.aiSummary} />
+                ) : null,
+              }
+            : null,
+        },
+        coverLetterMarkdown: a.coverLetter ? (
+          <MarkdownRenderer source={a.coverLetter} />
+        ) : null,
+      }))}
+      canUpdateRating={await hasOrgUserPermission(
+        "org:application:applicant_change_rating"
+      )}
+      canUpdateStage={await hasOrgUserPermission(
+        "org:application:applicant_change_state"
+      )}
+    />
+  );
+}
+
+async function getJobListingApplications(jobListingId: string) {
+  const data = await db.query.JobListingApplicationTable.findMany({
+    where: eq(JobListingApplicationTable.jobListingId, jobListingId),
+    columns: {
+      coverLetter: true,
+      createdAt: true,
+      stage: true,
+      rating: true,
+      jobListingId: true,
+    },
+    with: {
+      user: {
+        columns: {
+          id: true,
+          name: true,
+          imageUrl: true,
+        },
+        with: {
+          resume: {
+            columns: {
+              aiSummary: true,
+              resumeFileUrl: true,
+            },
+          },
+        },
+      },
+    },
+  });
+
+  //TODO:caching
+  return data;
+}
+
+function SkelletonApplicationTable() {
+  return null;
 }
