@@ -1,7 +1,6 @@
 import { ReactNode } from "react";
 import { AppSidebar } from "@/components/sidebar/AppSidebar";
-import { SidebarUserButton } from "../../features/users/components/SidebarUserButton";
-import { ClipboardListIcon, LayoutIcon, Plus, PlusIcon } from "lucide-react";
+import { ClipboardListIcon, Plus, PlusIcon } from "lucide-react";
 import SidebarNavMenuGroup from "@/components/sidebar/SidebarNavMenuGroup";
 import {
   SidebarGroup,
