@@ -45,9 +45,9 @@ const searchParamsSchema = z.object({
 export async function JobListingItems({ searchParams, params }: Props) {
   const jobListingId = params ? (await params).jobListingId : undefined;
   const { success, data } = searchParamsSchema.safeParse(await searchParams);
-  
+
   const search = success ? data : {};
-  
+
   const jobListings = await getJobListings(await search, jobListingId);
   if (jobListings.length === 0) {
     return (
@@ -61,7 +61,7 @@ export async function JobListingItems({ searchParams, params }: Props) {
           className="block"
           key={jobListing.id}
           href={`/job-listings/${jobListing.id}?${convertSearchParamsToString(
-            search
+            search,
           )}`}
         >
           <JobListingListItem
@@ -106,7 +106,7 @@ function JobListingListItem({
     <Card
       className={cn(
         "@container",
-        jobListing.isFeatured && "border-featured bg-featured/20"
+        jobListing.isFeatured && "border-featured bg-featured/20",
       )}
     >
       <CardHeader>
@@ -164,19 +164,19 @@ export function DaysSincePosting({ postedAt }: { postedAt: string }) {
 
 async function getJobListings(
   searchParams: z.infer<typeof searchParamsSchema>,
-  jobListingId: string | undefined
+  jobListingId: string | undefined,
 ) {
   //TODO: insert cache
 
   const whereConditions: (SQL | undefined)[] = [];
   if (searchParams.title) {
     whereConditions.push(
-      ilike(JobListingTable.title, `%${searchParams.title}%`)
+      ilike(JobListingTable.title, `%${searchParams.title}%`),
     );
   }
   if (searchParams.locationRequirement) {
     whereConditions.push(
-      eq(JobListingTable.locationRequirement, searchParams.locationRequirement)
+      eq(JobListingTable.locationRequirement, searchParams.locationRequirement),
     );
   }
   if (searchParams.city) {
@@ -184,12 +184,12 @@ async function getJobListings(
   }
   if (searchParams.state) {
     whereConditions.push(
-      eq(JobListingTable.stateAbbreviation, searchParams.state)
+      eq(JobListingTable.stateAbbreviation, searchParams.state),
     );
   }
   if (searchParams.experience) {
     whereConditions.push(
-      eq(JobListingTable.experienceLevel, searchParams.experience)
+      eq(JobListingTable.experienceLevel, searchParams.experience),
     );
   }
   if (searchParams.type) {
@@ -197,7 +197,7 @@ async function getJobListings(
   }
   if (searchParams.jobIds) {
     whereConditions.push(
-      or(...searchParams.jobIds.map((jobId) => eq(JobListingTable.id, jobId)))
+      or(...searchParams.jobIds.map((jobId) => eq(JobListingTable.id, jobId))),
     );
   }
 
@@ -206,10 +206,10 @@ async function getJobListings(
       jobListingId
         ? and(
             eq(JobListingTable.status, "published"),
-            eq(JobListingTable.id, jobListingId)
+            eq(JobListingTable.id, jobListingId),
           )
         : undefined,
-      and(eq(JobListingTable.status, "published"), ...whereConditions)
+      and(eq(JobListingTable.status, "published"), ...whereConditions),
     ),
     with: {
       organization: {
