@@ -36,6 +36,7 @@ import { StateSelectItems } from "./StateSelectItems";
 import { Button } from "@/components/ui/button";
 import LoadingSwap from "@/components/LoadingSwap";
 import { useSidebar } from "@/components/ui/sidebar";
+import { ClearableInput } from "@/components/clearableInput";
 
 const ANY_VALUE = "any";
 
@@ -98,7 +99,7 @@ export function JobListingFilterForm() {
             <FormItem>
               <FormLabel>Job Title</FormLabel>
               <FormControl>
-                <Input {...field} />
+                <ClearableInput {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -136,7 +137,7 @@ export function JobListingFilterForm() {
             <FormItem>
               <FormLabel>City</FormLabel>
               <FormControl>
-                <Input {...field} />
+                <ClearableInput {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
