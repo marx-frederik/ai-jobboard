@@ -1,7 +1,10 @@
+import { Suspense } from "react";
 import { JobBoardSidebar } from "../_shared/JobBoardSidebar";
 
-
-
 export default function JobBoardSideBarPage() {
-  return <JobBoardSidebar />;
+  return (
+    <Suspense fallback={null}>
+      <JobBoardSidebar />
+    </Suspense>
+  );
 }
