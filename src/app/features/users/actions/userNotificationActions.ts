@@ -1,8 +1,7 @@
 import getCurrentUser from "@/services/clerk/lib/getCurrentUser";
 import z from "zod";
-import { UserNotificationSettingsSchema } from "./schemas";
-import { updateUserNotificationsSettings as updateUserNotificationsSettingsDb } from "@/";
-import {insert} from "@/"
+import { UserNotificationSettingsSchema } from "@/features/users/actions/schemas";
+import { updateUserNotificationsSettings as updateUserNotificationsSettingsDb } from "@/features/users/db/userNotification";
 export async function updateUserNotificationsSettings(
   unsafeData: z.infer<typeof UserNotificationSettingsSchema>
 ) {
